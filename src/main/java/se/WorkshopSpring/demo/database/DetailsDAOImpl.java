@@ -10,50 +10,47 @@ import java.util.Collection;
 
 @Repository
 @Transactional
-public class DetailsDAOImpl implements detailsDAO{
+public class DetailsDAOImpl implements GenericCrudDAO<Details,Integer>{
 
     private final EntityManager entityManager;
 
-    @Autowired
     public DetailsDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    @Override
-    public Details create(Details details) throws IllegalAccessException {
-        if (details == null) throw new IllegalAccessException("Details was null");
 
-            entityManager.persist(details);
-
-        return details;
-    }
-
-    @Override
-    public Details update(Details details) throws IllegalAccessException {
-        if(details == null) throw new IllegalAccessException("Details was null");
-        return entityManager.merge(details);
-    }
 
 
     @Override
-    public Details findById(int id) throws IllegalAccessException {
-       if(id <=0 ) throw new IllegalAccessException("Id cant be 0");
-       return entityManager.find(Details.class,id);
+    public Details findById(Integer id) {
+        if (id==null) throw new IllegalArgumentException("Id was null");
+        return entityManager.find(Details.class,id);
     }
 
     @Override
     public Collection<Details> findAll() {
-        return entityManager.createQuery("select d from Details d ",Details.class)
+        return entityManager.createQuery("SELECT d FROM Details d",Details.class)
                 .getResultList();
     }
 
-
+    @Override
+    public Details create(Details details) {
+        if (details==null) throw new IllegalArgumentException("Details was null");
+        entityManager.persist(details);
+        return details;
+    }
 
     @Override
+    public Details update(Details details) {
+        if(details == null) throw new IllegalArgumentException("Details was null");
+       return entityManager.merge(details);
+    }
 
-    public void delete(int id) throws IllegalAccessException {
+    @Override
+    public void remove(Integer id) {
+        if(id == null) throw new IllegalArgumentException("Id was null");
 
-      entityManager.remove(findById(id));
+        entityManager.remove(findById(id));
 
     }
 }

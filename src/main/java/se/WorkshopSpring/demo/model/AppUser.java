@@ -17,7 +17,7 @@ public class AppUser {
             cascade = CascadeType.ALL,
             fetch = FetchType.LAZY
     )
-    @JoinColumn(name = "fk_details_id")
+    @JoinColumn(name = "fk_details_id",table = "app_user")
     private Details userDetails;
 
     public AppUser(int appUserId, String username, String password, LocalDate regDate, Details userDetails) {
