@@ -1,8 +1,9 @@
 package se.WorkshopSpring.demo.database;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import se.WorkshopSpring.demo.Interface.BookLoanDAO;
+import se.WorkshopSpring.demo.Interface.GenericCrudDAO;
 import se.WorkshopSpring.demo.model.BookLoan;
 
 import javax.persistence.EntityManager;
@@ -10,7 +11,7 @@ import java.util.Collection;
 
 @Repository
 @Transactional
-public class BookLoanDAOImpl implements GenericCrudDAO<BookLoan,Integer> {
+public class BookLoanDAOImpl implements BookLoanDAO {
 
   private final EntityManager entityManager;
 

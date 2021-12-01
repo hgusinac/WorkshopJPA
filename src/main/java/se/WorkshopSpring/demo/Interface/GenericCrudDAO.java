@@ -1,4 +1,4 @@
-package se.WorkshopSpring.demo.database;
+package se.WorkshopSpring.demo.Interface;
 
 import java.util.Collection;
 

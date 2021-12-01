@@ -3,6 +3,8 @@ package se.WorkshopSpring.demo.database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import se.WorkshopSpring.demo.Interface.AppUserDAO;
+import se.WorkshopSpring.demo.Interface.GenericCrudDAO;
 import se.WorkshopSpring.demo.model.AppUser;
 
 import javax.persistence.EntityManager;
@@ -10,7 +12,7 @@ import java.util.Collection;
 
 @Repository
 @Transactional
-public class AppUserDAOImpl implements GenericCrudDAO <AppUser,Integer> {
+public class AppUserDAOImpl implements AppUserDAO {
 
     private final EntityManager entityManager;
 

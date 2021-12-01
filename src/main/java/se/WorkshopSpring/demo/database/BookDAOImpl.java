@@ -2,6 +2,8 @@ package se.WorkshopSpring.demo.database;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import se.WorkshopSpring.demo.Interface.BookDAO;
+import se.WorkshopSpring.demo.Interface.GenericCrudDAO;
 import se.WorkshopSpring.demo.model.Book;
 
 import javax.persistence.EntityManager;
@@ -10,7 +12,7 @@ import java.util.Collection;
 
 @Repository
 @Transactional
-public class BookDAOImpl implements GenericCrudDAO<Book,Integer>{
+public class BookDAOImpl implements BookDAO {
 
 
     private final EntityManager entityManager;
