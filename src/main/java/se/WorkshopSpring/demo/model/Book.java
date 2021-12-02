@@ -1,6 +1,8 @@
 package se.WorkshopSpring.demo.model;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Book {
@@ -12,6 +14,12 @@ public class Book {
     @Column(length = 40)
     private String title;
     private int maxLoanDays;
+    private boolean available=true;
+    @ManyToMany(
+            cascade = {CascadeType.DETACH,CascadeType.REFRESH},
+            fetch = FetchType.LAZY
+    )
+    private Set<Author> authors = new HashSet<>();
 
     public Book(int bookId, String isbn, String title, int maxLoanDays) {
         this.bookId = bookId;
@@ -53,5 +61,37 @@ public class Book {
 
     public void setMaxLoanDays(int maxLoanDays) {
         this.maxLoanDays = maxLoanDays;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        if (authors == null) authors = new HashSet<>();
+        if (authors.isEmpty()){
+            if (this.authors!=null){
+                this.authors.forEach(author -> author.getWrittenBooks().remove(this));
+            }
+        }else{
+            authors.forEach(author -> author.getWrittenBooks().add(this));
+        }
+        this.authors = authors;
+    }
+
+    public void addAuthor(Author author){
+        if (author == null) throw  new IllegalArgumentException("Authors was null");
+        authors.add(author);
+        Set<Book> books = author.getWrittenBooks();
+        books.add(this);
+        author.setWrittenBooks(books);
     }
 }

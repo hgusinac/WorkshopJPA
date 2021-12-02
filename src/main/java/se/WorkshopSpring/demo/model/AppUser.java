@@ -2,6 +2,8 @@ package se.WorkshopSpring.demo.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class AppUser {
@@ -19,6 +21,15 @@ public class AppUser {
     )
     @JoinColumn(name = "fk_details_id",table = "app_user")
     private Details userDetails;
+
+    @OneToMany(
+            cascade = {CascadeType.REFRESH,CascadeType.DETACH,CascadeType.PERSIST,CascadeType.MERGE},
+            fetch = FetchType.LAZY,
+            orphanRemoval = true,
+            mappedBy = "borrower"
+    )
+    private List<BookLoan> bookLoans = new ArrayList<>();
+
 
     public AppUser(int appUserId, String username, String password, LocalDate regDate, Details userDetails) {
         this.appUserId = appUserId;
@@ -69,5 +80,24 @@ public class AppUser {
 
     public void setUserDetails(Details userDetails) {
         this.userDetails = userDetails;
+    }
+
+    public void addBookLoan(BookLoan bookLoan){
+        if (bookLoan==null) throw new IllegalArgumentException("BookLoan was null");
+        if (bookLoan.getBook()==null) throw new IllegalArgumentException("no books to loan");
+
+        bookLoan.getBook().setAvailable(false);
+        bookLoans.add(bookLoan);
+        bookLoan.setBorrower(this);
+
+    }
+    public void removeBookLoan(BookLoan bookLoan){
+        if (bookLoan==null) throw new IllegalArgumentException("BookLoan was null");
+        if (!bookLoans.contains(bookLoan)) throw new IllegalArgumentException("Bookloan is not found");
+
+        bookLoan.getBook().setAvailable(true);
+
+        bookLoans.remove(bookLoan);
+
     }
 }
